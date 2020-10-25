@@ -33,7 +33,7 @@ WX_LIBS     := $(call shell-or-die,$(WX_CONFIG) --libs     base core aui propgri
 CFLAGS   := -Wall -std=c99   -ggdb -I. -Iinclude/ $(CFLAGS)
 CXXFLAGS := -Wall -std=c++11 -ggdb -I. -Iinclude/ $(WX_CXXFLAGS) $(CXXFLAGS)
 
-LIBS := $(LIBS) $(WX_LIBS) -ljansson -lcapstone
+LDLIBS := $(WX_LIBS) -ljansson -lcapstone $(LDLIBS)
 
 ifeq ($(DEBUG),)
 	DEBUG=0
@@ -117,11 +117,14 @@ APP_OBJS := \
 	src/AboutDialog.o \
 	src/app.o \
 	src/ArtProvider.o \
+	src/BasicDataTypes.o \
 	src/buffer.o \
+	src/BytesPerLineDialog.o \
 	src/ByteRangeSet.o \
 	src/ClickText.o \
 	src/CodeCtrl.o \
 	src/CommentTree.o \
+	src/DataType.o \
 	src/decodepanel.o \
 	src/DiffWindow.o \
 	src/disassemble.o \
@@ -129,11 +132,13 @@ APP_OBJS := \
 	src/DocumentCtrl.o \
 	src/EditCommentDialog.o \
 	src/Events.o \
+	src/FillRangeDialog.o \
 	src/LicenseDialog.o \
 	src/mainwindow.o \
 	src/Palette.o \
 	src/search.o \
 	src/SelectRangeDialog.o \
+	src/StringPanel.o \
 	src/textentrydialog.o \
 	src/Tab.o \
 	src/ToolPanel.o \
@@ -143,7 +148,7 @@ APP_OBJS := \
 
 $(EXE): $(APP_OBJS)
 	$(CXX) $(CXXFLAGS) -DLONG_VERSION='"$(LONG_VERSION)"' -c -o res/version.o res/version.cpp
-	$(CXX) $(CXXFLAGS) -o $@ $^ res/version.o $(LIBS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ res/version.o $(LDFLAGS) $(LDLIBS)
 
 TEST_OBJS := \
 	googletest/src/gtest-all.o \
@@ -160,9 +165,11 @@ TEST_OBJS := \
 	res/offsets32.o \
 	res/offsets48.o \
 	src/ArtProvider.o \
+	src/BasicDataTypes.o \
 	src/buffer.o \
 	src/ByteRangeSet.o \
 	src/CommentTree.o \
+	src/DataType.o \
 	src/DiffWindow.o \
 	src/document.o \
 	src/DocumentCtrl.o \
@@ -170,11 +177,14 @@ TEST_OBJS := \
 	src/Events.o \
 	src/Palette.o \
 	src/search.o \
+	src/StringPanel.o \
+	src/Tab.o \
 	src/textentrydialog.o \
 	src/ToolPanel.o \
 	src/util.o \
 	src/win32lib.o \
 	tests/buffer.o \
+	tests/ByteRangeMap.o \
 	tests/ByteRangeSet.o \
 	tests/CommentsDataObject.o \
 	tests/CommentTree.o \
@@ -188,10 +198,12 @@ TEST_OBJS := \
 	tests/SearchValue.o \
 	tests/SafeWindowPointer.o \
 	tests/SharedDocumentPointer.o \
+	tests/StringPanel.o \
+	tests/Tab.o \
 	tests/util.o
 
 tests/all-tests: $(TEST_OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIBS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 $(EMBED_EXE): tools/embed.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $<

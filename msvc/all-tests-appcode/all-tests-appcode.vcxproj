@@ -167,6 +167,7 @@
     <ClCompile Include="..\..\res\offsets32.c" />
     <ClCompile Include="..\..\res\offsets48.c" />
     <ClCompile Include="..\..\src\ArtProvider.cpp" />
+    <ClCompile Include="..\..\src\BasicDataTypes.cpp" />
     <ClCompile Include="..\..\src\buffer.cpp" />
     <ClCompile Include="..\..\src\ByteRangeSet.cpp" />
     <ClCompile Include="..\..\src\CommentTree.cpp" />
@@ -177,6 +178,7 @@
     <ClCompile Include="..\..\src\Events.cpp" />
     <ClCompile Include="..\..\src\Palette.cpp" />
     <ClCompile Include="..\..\src\search.cpp" />
+    <ClCompile Include="..\..\src\StringPanel.cpp" />
     <ClCompile Include="..\..\src\textentrydialog.cpp" />
     <ClCompile Include="..\..\src\ToolPanel.cpp" />
     <ClCompile Include="..\..\src\util.cpp" />
@@ -196,7 +198,9 @@
     <ClInclude Include="..\..\res\offsets32.h" />
     <ClInclude Include="..\..\res\offsets48.h" />
     <ClInclude Include="..\..\src\ArtProvider.hpp" />
+    <ClInclude Include="..\..\src\BasicDataTypes.hpp" />
     <ClInclude Include="..\..\src\buffer.hpp" />
+    <ClInclude Include="..\..\src\ByteRangeMap.hpp" />
     <ClInclude Include="..\..\src\ByteRangeSet.hpp" />
     <ClInclude Include="..\..\src\CommentTree.hpp" />
     <ClInclude Include="..\..\src\DiffWindow.hpp" />
@@ -206,6 +210,7 @@
     <ClInclude Include="..\..\src\Events.hpp" />
     <ClInclude Include="..\..\src\Palette.hpp" />
     <ClInclude Include="..\..\src\search.hpp" />
+    <ClInclude Include="..\..\src\StringPanel.hpp" />
     <ClInclude Include="..\..\src\textentrydialog.hpp" />
     <ClInclude Include="..\..\src\ToolPanel.hpp" />
     <ClInclude Include="..\..\src\util.hpp" />
