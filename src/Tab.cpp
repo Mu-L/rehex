@@ -117,8 +117,8 @@ REHex::Tab::Tab(wxWindow *parent):
 	
 	init_default_tools();
 	
-	htools_adjust_on_idle();
-	vtools_adjust_on_idle();
+	htools_adjust_later(true);
+	vtools_adjust_later(true);
 }
 
 REHex::Tab::Tab(wxWindow *parent, const std::string &filename):
@@ -171,8 +171,8 @@ REHex::Tab::Tab(wxWindow *parent, const std::string &filename):
 	
 	init_default_tools();
 	
-	htools_adjust_on_idle();
-	vtools_adjust_on_idle();
+	htools_adjust_later(true);
+	vtools_adjust_later(true);
 }
 
 REHex::Tab::~Tab()
@@ -214,7 +214,7 @@ void REHex::Tab::tool_create(const std::string &name, bool switch_to, wxConfig *
 		
 		if(adjust)
 		{
-			vtools_adjust_on_idle();
+			vtools_adjust_later(false);
 		}
 	}
 	else if(tpr->shape == ToolPanel::TPS_WIDE)
@@ -233,7 +233,7 @@ void REHex::Tab::tool_create(const std::string &name, bool switch_to, wxConfig *
 		
 		if(adjust)
 		{
-			htools_adjust_on_idle();
+			htools_adjust_later(false);
 		}
 	}
 }
@@ -261,11 +261,11 @@ void REHex::Tab::tool_destroy(const std::string &name)
 	
 	if(notebook == v_tools)
 	{
-		vtools_adjust();
+		vtools_adjust(false);
 	}
 	else if(notebook == h_tools)
 	{
-		htools_adjust();
+		htools_adjust(false);
 	}
 }
 
@@ -448,7 +448,7 @@ void REHex::Tab::OnHToolChange(wxNotebookEvent& event)
 		tp->set_visible(true);
 	}
 	
-	htools_adjust();
+	htools_adjust(false);
 }
 
 void REHex::Tab::OnVToolChange(wxBookCtrlEvent &event)
@@ -473,7 +473,7 @@ void REHex::Tab::OnVToolChange(wxBookCtrlEvent &event)
 		tp->set_visible(true);
 	}
 	
-	vtools_adjust();
+	vtools_adjust(false);
 }
 
 void REHex::Tab::OnHSplitterSashPosChanging(wxSplitterEvent &event)
@@ -1095,7 +1095,7 @@ int REHex::Tab::vsplit_clamp_sash(int sash_position)
 	return sash_position;
 }
 
-void REHex::Tab::vtools_adjust()
+void REHex::Tab::vtools_adjust(bool force_adjust)
 {
 	wxWindow *vt_current_page = v_tools->GetCurrentPage();
 	
@@ -1113,20 +1113,28 @@ void REHex::Tab::vtools_adjust()
 			v_splitter->SplitVertically(h_splitter, v_tools);
 		}
 		
-		int vtp_bw = std::max(vt_current_page->GetBestSize().GetWidth(), 0);
+		int vtp_mw = vt_current_page->GetMinSize().GetWidth();
+		int vtp_Mw = vt_current_page->GetMaxSize().GetWidth();
 		
-		/* Size overhead added by v_tools wxNotebook. */
-		int extra_w = v_tools->GetSize().GetWidth() - vt_current_page->GetSize().GetWidth();
+		int vtp_cw = vt_current_page->GetSize().GetWidth();
 		
-		/* Set the current position of the splitter to display the best size of the current
-		 * page and overhead.
-		*/
-		int vs_cw = v_splitter->GetClientSize().GetWidth();
-		v_splitter->SetSashPosition(vs_cw - (vtp_bw + extra_w + v_splitter->GetSashSize()));
+		if(force_adjust || vtp_cw < vtp_mw || (vtp_Mw >= 0 && vtp_cw > vtp_Mw))
+		{
+			int vtp_bw = std::max(vt_current_page->GetBestSize().GetWidth(), 0);
+			
+			/* Size overhead added by v_tools wxNotebook. */
+			int extra_w = v_tools->GetSize().GetWidth() - vt_current_page->GetSize().GetWidth();
+			
+			/* Set the current position of the splitter to display the best size of the current
+			* page and overhead.
+			*/
+			int vs_cw = v_splitter->GetClientSize().GetWidth();
+			v_splitter->SetSashPosition(vs_cw - (vtp_bw + extra_w + v_splitter->GetSashSize()));
+		}
 	}
 }
 
-void REHex::Tab::htools_adjust()
+void REHex::Tab::htools_adjust(bool force_adjust)
 {
 	wxWindow *ht_current_page = h_tools->GetCurrentPage();
 	
@@ -1144,14 +1152,22 @@ void REHex::Tab::htools_adjust()
 			h_splitter->SplitHorizontally(doc_ctrl, h_tools);
 		}
 		
-		int htp_bh = std::max(ht_current_page->GetBestSize().GetHeight(), 0);
+		int vtp_mh = ht_current_page->GetMinSize().GetHeight();
+		int vtp_Mh = ht_current_page->GetMaxSize().GetHeight();
 		
-		/* Size overhead added by h_tools wxNotebook. */
-		int extra_h = h_tools->GetSize().GetHeight() - ht_current_page->GetSize().GetHeight();
+		int vtp_ch = ht_current_page->GetSize().GetHeight();
 		
-		/* Set the sash position to display the tool page's best size. */
-		int hs_ch = h_splitter->GetClientSize().GetHeight();
-		h_splitter->SetSashPosition(hs_ch - (htp_bh + extra_h + h_splitter->GetSashSize()));
+		if(force_adjust || vtp_ch < vtp_mh || (vtp_Mh >= 0 && vtp_ch > vtp_Mh))
+		{
+			int htp_bh = std::max(ht_current_page->GetBestSize().GetHeight(), 0);
+			
+			/* Size overhead added by h_tools wxNotebook. */
+			int extra_h = h_tools->GetSize().GetHeight() - ht_current_page->GetSize().GetHeight();
+			
+			/* Set the sash position to display the tool page's best size. */
+			int hs_ch = h_splitter->GetClientSize().GetHeight();
+			h_splitter->SetSashPosition(hs_ch - (htp_bh + extra_h + h_splitter->GetSashSize()));
+		}
 	}
 }
 
@@ -1162,30 +1178,28 @@ void REHex::Tab::htools_adjust()
  * point the sizes seem to have been set up properly (on GTK anyway).
 */
 
-void REHex::Tab::vtools_adjust_on_idle()
+void REHex::Tab::vtools_adjust_later(bool force_adjust)
 {
-	Bind(wxEVT_IDLE, &REHex::Tab::vtools_adjust_now_idle, this);
+	SafeWindowPointer<Tab> weak_this(this);
+	CallAfter([weak_this, force_adjust]()
+	{
+		if(weak_this != NULL)
+		{
+			weak_this->vtools_adjust(force_adjust);
+		}
+	});
 }
 
-void REHex::Tab::vtools_adjust_now_idle(wxIdleEvent &event)
+void REHex::Tab::htools_adjust_later(bool force_adjust)
 {
-	Unbind(wxEVT_IDLE, &REHex::Tab::vtools_adjust_now_idle, this);
-	event.Skip();
-	
-	vtools_adjust();
-}
-
-void REHex::Tab::htools_adjust_on_idle()
-{
-	Bind(wxEVT_IDLE, &REHex::Tab::htools_adjust_now_idle, this);
-}
-
-void REHex::Tab::htools_adjust_now_idle(wxIdleEvent &event)
-{
-	Unbind(wxEVT_IDLE, &REHex::Tab::htools_adjust_now_idle, this);
-	event.Skip();
-	
-	htools_adjust();
+	SafeWindowPointer<Tab> weak_this(this);
+	CallAfter([weak_this, force_adjust]()
+	{
+		if(weak_this != NULL)
+		{
+			weak_this->htools_adjust(force_adjust);
+		}
+	});
 }
 
 /* wxEVT_NOTEBOOK_PAGE_CHANGED events aren't generated consistently between platforms and versions
