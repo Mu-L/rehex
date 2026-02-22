@@ -25,6 +25,9 @@
 /res/ascii48.c
 /res/ascii48.h
 
+/res/backward32.c
+/res/backward32.h
+
 /res/bg16.c
 /res/bg16.h
 
@@ -58,10 +61,16 @@
 /res/document_save_as32.c
 /res/document_save_as32.h
 
+/res/down32.c
+/res/down32.h
+
 /res/fit_to_screen_dark_16.c
 /res/fit_to_screen_dark_16.h
 /res/fit_to_screen_light_16.c
 /res/fit_to_screen_light_16.h
+
+/res/forward32.c
+/res/forward32.h
 
 /res/icon16.c
 /res/icon16.h
@@ -103,6 +112,9 @@
 /res/swap_vert_light_16.c
 /res/swap_vert_light_16.h
 
+/res/up32.c
+/res/up32.h
+
 /res/zoom_in_dark_16.c
 /res/zoom_in_dark_16.h
 /res/zoom_in_light_16.c
@@ -114,6 +126,9 @@
 /res/zoom_out_light_16.h
 
 /res/version-res-defs.h
+
+/res/REHex.icns
+/res/REHex.iconset/
 
 /src/lua-bindings/.done
 /src/lua-bindings/rehex_bind.cpp
@@ -215,3 +230,6 @@ msvc/resources/x64/
 /wxLua/modules/wxbind/src/wxxrc_bind.cpp
 /wxLua/modules/wxlua/wxlua_bind.cpp
 /wxLua/modules/wxlua/wxlua_bind.h
+
+/mac-dependencies/
+/mac-dependencies-build/
