@@ -1,5 +1,5 @@
 /* Reverse Engineer's Hex Editor
- * Copyright (C) 2024 Daniel Collins <solemnwarning@solemnwarning.net>
+ * Copyright (C) 2024-2026 Daniel Collins <solemnwarning@solemnwarning.net>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 2 as published by
@@ -84,8 +84,8 @@ void REHex::CustomMessageDialog::AddButton(wxWindowID id, const wxString &label,
 	
 	button_sizer->Add(button, 0, wxLEFT, left_margin);
 	
-	// GetSizer()->Layout();
-	// Fit();
+	GetSizer()->Layout();
+	Fit();
 }
 
 void REHex::CustomMessageDialog::AddButton(wxWindowID id, const wxString &label, const wxArtID &bitmap_id)

@@ -1502,7 +1502,7 @@ void REHex::Tab::file_modified_dialog()
 			(wxString("The file '") + doc->get_title() + "' has been modified externally.\n"
 				+ "Reload this file?"),
 			"File modified",
-			(wxICON_EXCLAMATION | wxCENTER));
+			(wxDEFAULT_DIALOG_STYLE | wxICON_EXCLAMATION));
 		
 		confirm.AddButton(ID_RELOAD, "Yes");
 		confirm.AddButton(ID_AUTO_RELOAD, "Yes (always)");
@@ -1510,6 +1510,8 @@ void REHex::Tab::file_modified_dialog()
 		
 		confirm.SetEscapeId(ID_IGNORE);
 		confirm.SetAffirmativeId(ID_RELOAD);
+
+		confirm.Centre();
 		
 		int response = confirm.ShowModal();
 		if(response == ID_IGNORE)

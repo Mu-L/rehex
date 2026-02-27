@@ -22,6 +22,8 @@ Version TBC
  * Fix cursor jumping to the wrong position when using backspace to
    delete the last byte of the file in insert mode.
 
+ * Fix display of modified file reload prompt on Windows and macOS.
+
 Version 0.63.4 (2025-11-22):
 
  * Save selected value colour map in default view (#268).
