@@ -47,6 +47,8 @@ namespace REHex {
 	class App: public wxApp
 	{
 		public:
+			App();
+			
 			wxConfig *config;
 			AppSettings *settings;
 			

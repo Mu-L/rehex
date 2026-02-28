@@ -23,12 +23,19 @@
 #include <wx/filename.h>
 #include <wx/font.h>
 #include <wx/stdpaths.h>
+#include <wx/sysopt.h>
 #include <wx/version.h>
 
 #include "App.hpp"
 #include "Events.hpp"
 #include "mainwindow.hpp"
 #include "../res/version.h"
+
+REHex::App::App()
+{
+	/* Ask wxWidgets to kindly not swallow any uncaught exceptions. */
+	wxSystemOptions::SetOption("catch-unhandled-exceptions", false);
+}
 
 const std::string &REHex::App::get_last_directory()
 {
