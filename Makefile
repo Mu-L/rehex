@@ -31,11 +31,11 @@ config-test-flag = $\
 	$(if $(wildcard $(1).aok)$(wildcard $(1).bok),$\
 		$(if $(wildcard $(1).aok),,$(if $(wildcard $(1).bok),$(2),)),$\
 		$(info Checking if we need $(2)...)$\
-		$(if $(shell $(CXX) $(CXXFLAGS) -o $(1).aok $(1) $(LDFLAGS) $(LDLIBS) > /dev/null 2>&1 && echo yes),$\
+		$(if $(shell $(CXX) $(BASE_CFLAGS) -o $(1).aok $(1) > /dev/null 2>&1 && echo yes),$\
 			$(info No),$\
-			$(if $(shell $(CXX) $(CXXFLAGS) -o $(1).bok $(1) $(LDFLAGS) $(LDLIBS) $(2) > /dev/null 2>&1 && echo yes),$\
+			$(if $(shell $(CXX) $(BASE_CFLAGS) -o $(1).bok $(1) $(2) > /dev/null 2>&1 && echo yes),$\
 				$(info Yes)$(2),$\
-				$(shell $(CXX) $(CXXFLAGS) -o $(1).aok $(1) $(LDFLAGS) $(LDLIBS) 1>&2)$(error Unable to compile $(1)))))
+				$(shell $(CXX) $(BASE_CFLAGS) -o $(1).aok $(1) 1>&2)$(error Unable to compile $(1)))))
 
 LUA          ?= lua
 WX_CONFIG    ?= wx-config
