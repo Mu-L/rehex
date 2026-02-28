@@ -24,6 +24,8 @@ Version TBC
 
  * Fix display of modified file reload prompt on Windows and macOS.
 
+ * Fix potential crash when calculating CRC checksums.
+
 Version 0.63.4 (2025-11-22):
 
  * Save selected value colour map in default view (#268).
