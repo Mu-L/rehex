@@ -1,5 +1,5 @@
 /* Reverse Engineer's Hex Editor
- * Copyright (C) 2019-2025 Daniel Collins <solemnwarning@solemnwarning.net>
+ * Copyright (C) 2019-2026 Daniel Collins <solemnwarning@solemnwarning.net>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 2 as published by
@@ -64,6 +64,8 @@ int main(int argc, char **argv)
 	#else
 	app->set_font_name(default_font.GetFaceName().ToStdString());
 	#endif
+	
+	app->set_font_size_adjustment(0);
 	
 	app->bulk_updates_freeze_count = 0;
 	app->console = new REHex::ConsoleBuffer();
