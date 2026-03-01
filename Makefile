@@ -31,11 +31,11 @@ config-test-flag = $\
 	$(if $(wildcard $(1).aok)$(wildcard $(1).bok),$\
 		$(if $(wildcard $(1).aok),,$(if $(wildcard $(1).bok),$(2),)),$\
 		$(info Checking if we need $(2)...)$\
-		$(if $(shell $(CXX) $(BASE_CFLAGS) -o $(1).aok $(1) > /dev/null 2>&1 && echo yes),$\
+		$(if $(shell $(CXX) $(CXXFLAGS_NO_GTK) -o $(1).aok $(1) $(LDFLAGS) $(LDLIBS_NO_GTK) > /dev/null 2>&1 && echo yes),$\
 			$(info No),$\
-			$(if $(shell $(CXX) $(BASE_CFLAGS) -o $(1).bok $(1) $(2) > /dev/null 2>&1 && echo yes),$\
+			$(if $(shell $(CXX) $(CXXFLAGS_NO_GTK) -o $(1).bok $(1) $(LDFLAGS) $(LDLIBS_NO_GTK) $(2) > /dev/null 2>&1 && echo yes),$\
 				$(info Yes)$(2),$\
-				$(shell $(CXX) $(BASE_CFLAGS) -o $(1).aok $(1) 1>&2)$(error Unable to compile $(1)))))
+				$(shell $(CXX) $(CXXFLAGS_NO_GTK) -o $(1).aok $(1) $(LDFLAGS) $(LDLIBS_NO_GTK) 1>&2)$(error Unable to compile $(1)))))
 
 LUA          ?= lua
 WX_CONFIG    ?= wx-config
@@ -141,7 +141,8 @@ CFLAGS          := $(BASE_CFLAGS) -std=c99   -I. -Iinclude/ -IwxLua/modules/ -Iw
 CXXFLAGS_NO_GTK := $(BASE_CFLAGS) $(CXXSTD) -I. -Iinclude/ -IwxLua/modules/ -IwxFreeChart/include/ -DwxOVERRIDE=override  $(HELP_CFLAGS) $(BOTAN_CFLAGS) $(CAPSTONE_CFLAGS) $(JANSSON_CFLAGS) $(LUA_CFLAGS) $(WX_CXXFLAGS) $(CXXFLAGS)
 CXXFLAGS        := $(BASE_CFLAGS) $(CXXSTD) -I. -Iinclude/ -IwxLua/modules/ -IwxFreeChart/include/ -DwxOVERRIDE=override  $(HELP_CFLAGS) $(BOTAN_CFLAGS) $(CAPSTONE_CFLAGS) $(JANSSON_CFLAGS) $(LUA_CFLAGS) $(WX_CXXFLAGS) $(GTK_CFLAGS) $(CXXFLAGS)
 
-LDLIBS := -lunistring $(WX_LIBS) $(GTK_LIBS) $(BOTAN_LIBS) $(CAPSTONE_LIBS) $(JANSSON_LIBS) $(LUA_LIBS) $(LDLIBS)
+LDLIBS_NO_GTK := -lunistring $(WX_LIBS)             $(BOTAN_LIBS) $(CAPSTONE_LIBS) $(JANSSON_LIBS) $(LUA_LIBS) $(LDLIBS)
+LDLIBS        := -lunistring $(WX_LIBS) $(GTK_LIBS) $(BOTAN_LIBS) $(CAPSTONE_LIBS) $(JANSSON_LIBS) $(LUA_LIBS) $(LDLIBS)
 
 # Check if we need to link -latomic for std::atomic support routines.
 ifeq ($(need_compiler_flags),1)
